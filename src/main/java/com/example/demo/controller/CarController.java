@@ -1,15 +1,12 @@
 package com.example.demo.controller;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
+import com.example.demo.entity.Car;
+import com.example.demo.service.CarService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.entity.Car;
-
-import com.example.demo.service.CarService;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cars")
