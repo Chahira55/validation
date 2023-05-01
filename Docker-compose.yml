@@ -1,0 +1,47 @@
+version: '3.9'
+networks:
+  carrent_network:
+    driver: bridge
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - carrent_network
+  eurekaserver:
+    image: eurekaserver
+    ports:
+      - "8761:8761"
+    networks:
+      - carrent_network
+
+  #  Gateway-service:
+  #    image: gateway-service
+  #    ports:
+  #      - "8085:8085"
+  #    networks:
+  #      - carrent_network
+
+  javaapp:
+    image: rentcar
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://192.168.1.6:5432/mydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: mysecretpassword
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8761/eureka/
+    depends_on:
+      - db
+      - eurekaserver
+    networks:
+      - carrent_network
+volumes:
+  db-data:
